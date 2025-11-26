@@ -4,8 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import API from '../api/axios';
-import Navbar from '../components/Navbar';
-import Header from './Header';
+import Balatro from './AnimatedBackground';
 
 interface Punto {
   id: number;
@@ -40,7 +39,7 @@ const ajustarCercanos = (puntos: Punto[]): Punto[] => {
   });
 };
 
-// Marker que cambia de tamaño según zoom
+// Componente para markers que cambian de tamaño según zoom
 function ResizableMarker({ punto }: { punto: Punto }) {
   const map = useMap();
   const [icon, setIcon] = useState<L.Icon>(
@@ -79,7 +78,7 @@ function ResizableMarker({ punto }: { punto: Punto }) {
     updateSize(); // tamaño inicial
 
     return () => {
-      map.off('zoomend', updateSize);
+      map.off('zoomend', updateSize); // limpieza
     };
   }, [map, punto.tipo]);
 
@@ -103,6 +102,7 @@ function FitBounds({ puntos }: { puntos: Punto[] }) {
       puntos.map(p => [p.lat, p.lng] as [number, number])
     );
     map.fitBounds(bounds, { padding: [50, 50] });
+    // ❌ NO devolvemos nada, solo efecto
   }, [map, puntos]);
 
   return null;
@@ -110,7 +110,6 @@ function FitBounds({ puntos }: { puntos: Punto[] }) {
 
 export default function Home() {
   const [puntos, setPuntos] = useState<Punto[]>([]);
-  const [navbarOpen, setNavbarOpen] = useState<boolean>(true);
 
   useEffect(() => {
     API.get('/puntos')
@@ -128,34 +127,29 @@ export default function Home() {
       .catch(err => console.error(err));
   }, []);
 
-  const defaultCenter: [number, number] = [20.715, -103.36];
+  const defaultCenter: [number, number] = [20.715, -103.36]; // temporal mientras cargan los puntos
 
   return (
-    <div className="flex h-screen w-screen">
-      {/* Sidebar / Navbar */}
-      <Navbar open={navbarOpen} setOpen={setNavbarOpen} />
+    <div className="h-screen w-screen relative">
+      <Balatro isRotate={false} mouseInteraction={true} pixelFilter={700} />
+      <div className="absolute inset-0 bg-black/20 z-0"></div>
 
-      {/* Contenido principal */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <Header open={navbarOpen} setOpen={setNavbarOpen} />
+      <div className="absolute inset-0 z-10">
+        <MapContainer center={defaultCenter} zoom={10} className="h-full w-full">
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution="&copy; OpenStreetMap contributors"
+          />
 
-        {/* Mapa */}
-        <div className="flex-1 relative">
-          <MapContainer center={defaultCenter} zoom={10} className="h-full w-full">
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution="&copy; OpenStreetMap contributors"
-            />
+          {puntos.map(p => (
+            <ResizableMarker key={p.id} punto={p} />
+          ))}
 
-            {puntos.map(p => (
-              <ResizableMarker key={p.id} punto={p} />
-            ))}
-
-            <FitBounds puntos={puntos} />
-          </MapContainer>
-        </div>
+          <FitBounds puntos={puntos} />
+        </MapContainer>
       </div>
     </div>
   );
 }
+
+
