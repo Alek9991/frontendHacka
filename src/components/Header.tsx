@@ -27,18 +27,6 @@ export default function Header({ open, setOpen, userLogged, setUserLogged }: Hea
         <FiMenu size={24} />
       </button>
 
-  
-      {/* Botón usuario / login */}
-      <button
-        onClick={() => navigate('/login')} // Redirige a la página de login
-        className="flex items-center gap-2 p-2 rounded hover:bg-blue-500 transition-colors"
-      >
-        <FiUser size={20} />
-        <span className="hidden md:inline">Login</span>
-      </button>
-      {/* Título de la app */}
-      <h1 className="text-xl font-bold">CuencaApp</h1>
-
       {/* Botón usuario / login / logout */}
       {userLogged ? (
         <button

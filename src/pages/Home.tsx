@@ -146,8 +146,6 @@ export default function Home() {
       autor_nombre: p.autor_nombre,
       usuario_estado: p.usuario_estado,
       categoria_nombre: p.categoria_nombre,
-
-      // Alias usados en el mapa
       categoria: p.categoria_nombre,
       autor: p.autor_nombre,
 
@@ -164,7 +162,7 @@ export default function Home() {
   const defaultCenter: [number, number] = [20.70, -103.35];
 
   return (
-    <div className="flex-1 flex relative">
+    <div className="flex-1 w-full h-full">
       <MapContainer center={defaultCenter} zoom={10} className="flex-1 w-full h-full">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

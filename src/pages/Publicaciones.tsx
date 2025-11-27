@@ -3,6 +3,22 @@ import API from '../api/axios'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { useMap } from 'react-leaflet';
+
+function FitBounds({ puntos }: { puntos: Publicaciones[] }) {
+  const map = useMap();
+
+  useEffect(() => {
+    if (puntos.length > 0) {
+      const bounds = L.latLngBounds(
+        puntos.map(p => [p.lat, p.lng] as [number, number])
+      );
+      map.fitBounds(bounds, { padding: [50, 50] });
+    }
+  }, [puntos, map]);
+
+  return null;
+}
 
 interface Publicaciones {
   id: number
@@ -17,15 +33,26 @@ interface Publicaciones {
   categoria_nombre: string
 }
 
-// Icono para los marcadores
-const markerIcon = new L.Icon({
-  iconUrl:
-    'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
-  iconSize: [35, 55],
-  iconAnchor: [17, 55],
-  popupAnchor: [0, -55],
-})
+// Colores según categoría
+const colores: Record<string, string> = {
+  'contaminación': 'red',
+  'proyectos': 'orange',
+  'recursos hídricos': 'green',
+  'voluntariado': 'blue',
+  'default': 'grey'
+};
+
+// Retorna icono coloreado según categoría
+const getColorIcon = (categoria: string) =>
+  new L.Icon({
+    iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${
+      colores[categoria] || colores['default']
+    }.png`,
+    shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
+    iconSize: [35, 55],
+    iconAnchor: [17, 55],
+    popupAnchor: [0, -55],
+  });
 
 export default function Publicaciones() {
   const [publicaciones, setPublicaciones] = useState<Publicaciones[]>([])
@@ -57,28 +84,34 @@ export default function Publicaciones() {
       <h1 className="text-2xl font-bold mb-2">Publicaciones</h1>
       <p className="mb-4">Aquí se mostrarán los reportes y publicaciones de los usuarios.</p>
 
-      {/* Mapa con las publicaciones */}
       <div className="flex-1 mb-4">
         <MapContainer center={center} zoom={10} className="h-full w-full">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&copy; OpenStreetMap contributors"
-          />
-          {publicaciones.map(pub => (
-            <Marker key={pub.id} position={[pub.lat, pub.lng]} icon={markerIcon}>
-              <Popup>
-                <strong>{pub.titulo}</strong>
-                <p>{pub.descripcion}</p>
-                <p>Autor: {pub.autor_nombre}</p>
-                <p>Categoria: {pub.categoria_nombre}</p>
-                <p>Fecha: {new Date(pub.fecha).toLocaleString()}</p>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution="&copy; OpenStreetMap contributors"
+  />
+
+  <FitBounds puntos={publicaciones} />
+
+  {publicaciones.map(pub => (
+    <Marker
+      key={pub.id}
+      position={[pub.lat, pub.lng]}
+      icon={getColorIcon(pub.categoria_nombre)}
+    >
+      <Popup>
+        <strong>{pub.titulo}</strong>
+        <p>{pub.descripcion}</p>
+        <p>Autor: {pub.autor_nombre}</p>
+        <p>Categoria: {pub.categoria_nombre}</p>
+        <p>Fecha: {new Date(pub.fecha).toLocaleString()}</p>
+      </Popup>
+    </Marker>
+  ))}
+</MapContainer>
+
       </div>
 
-      {/* Listado debajo del mapa */}
       <div className="overflow-y-auto h-1/3">
         {publicaciones.map(pub => (
           <div
