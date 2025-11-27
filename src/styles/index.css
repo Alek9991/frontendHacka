@@ -96,3 +96,6 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+.leaflet-container * {
+  z-index: 0 !important;
+}
