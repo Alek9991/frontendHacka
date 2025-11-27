@@ -108,7 +108,7 @@ export default function Alertas() {
             <select
               value={nuevoTipo}
               onChange={e => setNuevoTipo(e.target.value as 'ciudadano' | 'clima')}
-              className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+              className="w-full border border-gray-400 bg-gray-50 rounded px-3 py-2 mb-3"
             >
               <option value="ciudadano">Ciudadano</option>
               <option value="clima">Clima</option>
@@ -120,7 +120,7 @@ export default function Alertas() {
                 <select
                   value={nuevoNivel || ''}
                   onChange={e => setNuevoNivel(e.target.value as 'alto' | 'medio' | 'bajo')}
-                  className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+                  className="w-full border border-gray-400 bg-gray-50 rounded px-3 py-2 mb-3"
                 >
                   <option value="">Seleccione</option>
                   <option value="alto">Alto</option>
@@ -135,14 +135,14 @@ export default function Alertas() {
               placeholder="Mensaje"
               value={nuevoMensaje}
               onChange={e => setNuevoMensaje(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+              className="w-full border border-gray-400 bg-gray-50 rounded px-3 py-2 mb-3"
             />
             <input
               type="text"
               placeholder="Estado"
               value={nuevoEstado}
               onChange={e => setNuevoEstado(e.target.value)}
-              className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
+              className="w-full border border-gray-400 bg-gray-50 rounded px-3 py-2 mb-3"
             />
 
             <div className="flex justify-end gap-2">
