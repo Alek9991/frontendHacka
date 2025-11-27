@@ -19,9 +19,7 @@ export default function Header({ open, setOpen }: HeaderProps) {
         <FiMenu size={24} />
       </button>
 
-      {/* Título de la app */}
-      <h1 className="text-xl font-bold">CuencaApp</h1>
-
+  
       {/* Botón usuario / login */}
       <button
         onClick={() => navigate('/login')} // Redirige a la página de login
