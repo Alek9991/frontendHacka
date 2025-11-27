@@ -1,3 +1,4 @@
+// src/App.tsx
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
@@ -28,19 +29,23 @@ function App() {
             userLogged={userLogged}
             setUserLogged={setUserLogged}
           />
+
           {/* Contenedor de rutas */}
-          <div className="flex-1 flex relative overflow-hidden justify-center items-center bg-gray-900">
+          <div className="flex-1 relative overflow-auto bg-gray-100">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/publicaciones" element={<Publicaciones />} />
               <Route path="/alertas" element={<Alertas />} />
-              {/* Login solo si no está logueado */}
+
+              {/* Login centrado solo si no está logueado */}
               <Route
                 path="/login"
                 element={
                   !userLogged ? (
-                    <div className="w-full max-w-sm">
-                      <Login setUserLogged={setUserLogged} />
+                    <div className="flex-1 flex justify-center items-center">
+                      <div className="w-full max-w-sm">
+                        <Login setUserLogged={setUserLogged} />
+                      </div>
                     </div>
                   ) : (
                     <Navigate to="/" />
