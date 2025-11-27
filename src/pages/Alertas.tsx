@@ -22,7 +22,6 @@ export default function Alertas() {
       .catch(err => console.error(err));
   }, []);
 
-  // Función para determinar color según tipo y nivel
   const getAlertColor = (alerta: Alerta) => {
     if (alerta.tipo === 'ciudadano') return 'bg-blue-600';
     if (alerta.tipo === 'clima') {
@@ -37,7 +36,7 @@ export default function Alertas() {
   };
 
   return (
-    <div className="p-6 bg-red-900 min-h-screen text-white">
+    <div className="flex-1 flex flex-col overflow-auto p-6 bg-red-900 text-white">
       <h1 className="text-3xl font-bold mb-6 text-center">Alertas</h1>
       <div className="grid md:grid-cols-2 gap-6">
         {alertas.map(alerta => (
