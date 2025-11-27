@@ -37,7 +37,7 @@ export default function Alertas() {
   };
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-white">
+    <div className="p-6 bg-red-900 min-h-screen text-white">
       <h1 className="text-3xl font-bold mb-6 text-center">Alertas</h1>
       <div className="grid md:grid-cols-2 gap-6">
         {alertas.map(alerta => (

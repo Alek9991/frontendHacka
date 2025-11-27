@@ -14,7 +14,7 @@ interface NavbarProps {
 export default function Navbar({ open, setOpen }: NavbarProps) {
   const links = [
     { name: 'Inicio', path: '/', icon: <FiHome size={20} /> },
-    { name: 'Publicaciones', path: '/posts', icon: <FiFileText size={20} /> },
+    { name: 'Publicaciones', path: '/publicaciones', icon: <FiFileText size={20} /> },
     { name: 'Alertas', path: '/alertas', icon: <FiAlertCircle size={20} /> },
     
   ];

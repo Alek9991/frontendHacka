@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import API from '../api/axios';
 import { FiMail, FiLock } from 'react-icons/fi';
-import AnimatedBackground from './AnimatedBackground';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -31,7 +30,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center h-screen relative overflow-hidden">
       {/* Fondo animado */}
-      <AnimatedBackground />
+      
 
       {/* Overlay oscuro para legibilidad */}
       <div className="absolute inset-0 bg-black/30"></div>

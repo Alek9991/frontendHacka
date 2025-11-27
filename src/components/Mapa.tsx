@@ -5,6 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import API from '../api/axios';
 
+
 interface Punto {
   id: number;
   nombre: string;
@@ -38,7 +39,7 @@ const ajustarCercanos = (puntos: Punto[]): Punto[] => {
   });
 };
 
-// Marker que cambia de tamaño según zoom
+// Componente para markers que cambian de tamaño según zoom
 function ResizableMarker({ punto }: { punto: Punto }) {
   const map = useMap();
   const [icon, setIcon] = useState<L.Icon>(
@@ -77,7 +78,7 @@ function ResizableMarker({ punto }: { punto: Punto }) {
     updateSize(); // tamaño inicial
 
     return () => {
-      map.off('zoomend', updateSize);
+      map.off('zoomend', updateSize); // limpieza
     };
   }, [map, punto.tipo]);
 
@@ -101,12 +102,13 @@ function FitBounds({ puntos }: { puntos: Punto[] }) {
       puntos.map(p => [p.lat, p.lng] as [number, number])
     );
     map.fitBounds(bounds, { padding: [50, 50] });
+    // ❌ NO devolvemos nada, solo efecto
   }, [map, puntos]);
 
   return null;
 }
 
-export default function Home() {
+export default function Mapa() {
   const [puntos, setPuntos] = useState<Punto[]>([]);
 
   useEffect(() => {
@@ -125,22 +127,8 @@ export default function Home() {
       .catch(err => console.error(err));
   }, []);
 
-  const defaultCenter: [number, number] = [20.715, -103.36];
+  const defaultCenter: [number, number] = [20.715, -103.36]; // temporal mientras cargan los puntos
 
-  return (
-    <div className="flex-1 flex relative">
-      <MapContainer center={defaultCenter} zoom={10} className="flex-1 w-full h-full">
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution="&copy; OpenStreetMap contributors"
-        />
-
-        {puntos.map(p => (
-          <ResizableMarker key={p.id} punto={p} />
-        ))}
-
-        <FitBounds puntos={puntos} />
-      </MapContainer>
-    </div>
-  );
 }
+
+
