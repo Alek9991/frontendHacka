@@ -94,6 +94,8 @@ export default function Login({ setUserLogged }: LoginProps) {
           >
             Entrar
           </button>
+          
+
         </form>
       </div>
 

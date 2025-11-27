@@ -16,7 +16,6 @@ export default function Navbar({ open, setOpen }: NavbarProps) {
     { name: 'Inicio', path: '/', icon: <FiHome size={20} /> },
     { name: 'Publicaciones', path: '/publicaciones', icon: <FiFileText size={20} /> },
     { name: 'Alertas', path: '/alertas', icon: <FiAlertCircle size={20} /> },
-    
   ];
 
   return (
@@ -30,7 +29,7 @@ export default function Navbar({ open, setOpen }: NavbarProps) {
         {open && <span className="text-lg font-bold">CuencaApp</span>}
         <button
           onClick={() => setOpen(!open)}
-          className="p-1 rounded hover:bg-blue-500 transition-colors"
+          className="p-1 rounded hover:bg-blue-500 transition-colors text-white"
         >
           <FiMenu size={24} />
         </button>
@@ -42,12 +41,12 @@ export default function Navbar({ open, setOpen }: NavbarProps) {
           <Link
             key={link.name}
             to={link.path}
-            className="flex items-center gap-2 hover:underline relative group"
+            className="flex items-center gap-2 text-white hover:text-black relative group"
           >
             {link.icon}
             {open && <span>{link.name}</span>}
 
-            {/* Tooltip cuando sidebar colapsado */}
+            {/* Tooltip cuando la sidebar está colapsada */}
             {!open && (
               <span className="absolute left-16 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                 {link.name}
