@@ -14,7 +14,6 @@ interface Punto {
   lng: number;
 }
 
-// Colores por categoría
 const colores: Record<string, string> = {
   contaminacion: 'red',
   proyectos: 'orange',
@@ -22,30 +21,22 @@ const colores: Record<string, string> = {
   voluntariado: 'blue',
 };
 
-// Ajustar coordenadas cercanas para no solaparse
 const ajustarCercanos = (puntos: Punto[]): Punto[] => {
   const mapa: Record<string, number> = {};
   return puntos.map(p => {
     const key = `${p.lat}-${p.lng}`;
     const count = mapa[key] || 0;
     mapa[key] = count + 1;
-    const offset = 0.00005 * count; // pequeño desplazamiento
-    return {
-      ...p,
-      lat: p.lat + offset,
-      lng: p.lng + offset,
-    };
+    const offset = 0.00005 * count;
+    return { ...p, lat: p.lat + offset, lng: p.lng + offset };
   });
 };
 
-// Marker que cambia de tamaño según zoom
 function ResizableMarker({ punto }: { punto: Punto }) {
   const map = useMap();
   const [icon, setIcon] = useState<L.Icon>(
     new L.Icon({
-      iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${
-        colores[punto.tipo] || 'grey'
-      }.png`,
+      iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${colores[punto.tipo] || 'grey'}.png`,
       shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
       iconSize: [30, 60],
       iconAnchor: [20, 60],
@@ -62,9 +53,7 @@ function ResizableMarker({ punto }: { punto: Punto }) {
 
       setIcon(
         new L.Icon({
-          iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${
-            colores[punto.tipo] || 'grey'
-          }.png`,
+          iconUrl: `https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-${colores[punto.tipo] || 'grey'}.png`,
           shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
           iconSize: size,
           iconAnchor: anchor,
@@ -74,11 +63,8 @@ function ResizableMarker({ punto }: { punto: Punto }) {
     };
 
     map.on('zoomend', updateSize);
-    updateSize(); // tamaño inicial
-
-    return () => {
-      map.off('zoomend', updateSize);
-    };
+    updateSize();
+    return () => map.off('zoomend', updateSize);
   }, [map, punto.tipo]);
 
   return (
@@ -92,17 +78,13 @@ function ResizableMarker({ punto }: { punto: Punto }) {
   );
 }
 
-// Ajusta automáticamente el mapa a todos los puntos
 function FitBounds({ puntos }: { puntos: Punto[] }) {
   const map = useMap();
   useEffect(() => {
-    if (puntos.length === 0) return;
-    const bounds = L.latLngBounds(
-      puntos.map(p => [p.lat, p.lng] as [number, number])
-    );
+    if (!puntos.length) return;
+    const bounds = L.latLngBounds(puntos.map(p => [p.lat, p.lng] as [number, number]));
     map.fitBounds(bounds, { padding: [50, 50] });
   }, [map, puntos]);
-
   return null;
 }
 
@@ -128,17 +110,15 @@ export default function Home() {
   const defaultCenter: [number, number] = [20.715, -103.36];
 
   return (
-    <div className="flex-1 flex relative">
-      <MapContainer center={defaultCenter} zoom={10} className="flex-1 w-full h-full">
+    <div className="flex-1 w-full h-full">
+      <MapContainer center={defaultCenter} zoom={10} className="w-full h-full">
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution="&copy; OpenStreetMap contributors"
         />
-
         {puntos.map(p => (
           <ResizableMarker key={p.id} punto={p} />
         ))}
-
         <FitBounds puntos={puntos} />
       </MapContainer>
     </div>
